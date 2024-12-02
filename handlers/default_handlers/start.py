@@ -3,7 +3,7 @@ from loader import bot
 from telebot.types import Message
 from states.states import BotStates
 from peewee import IntegrityError
-from database.models import User
+from database.models import User, create_models, MovieHistory
 
 
 @bot.message_handler(commands=['start'])

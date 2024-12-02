@@ -1,4 +1,3 @@
-
 from peewee import (
     AutoField,
     BooleanField,
@@ -11,7 +10,7 @@ from peewee import (
 )
 
 from config_data.config import DATE_FORMAT, DB_PATH
-
+import datetime
 db = SqliteDatabase(DB_PATH)
 
 
@@ -27,25 +26,51 @@ class User(BaseModel):
 
 class MovieHistory(BaseModel):
     history_id = AutoField()
-    user = ForeignKeyField(User, backref="tasks")
-    date = DateField()
+    user = ForeignKeyField(User, backref="user_hist")
+    date = DateField(default=datetime.datetime.now().strftime(DATE_FORMAT))
     movie_title = CharField()
     movie_description = CharField()
-    movie_rating = FloatField()
-    movie_year = IntegerField()
+    movie_rating = CharField() #FloatField()
+    movie_year = CharField() #IntegerField()
     movie_genre = CharField()
-    movie_age_rating = IntegerField()
+    movie_age_rating = CharField() #IntegerField()
     movie_poster = CharField()
     is_watched = BooleanField(default=False)
 
     def __str__(self):
-        return ("{history_id}. {user} {date} - {movie_title}"
+        return ("Дата запроса: {date}\n"
+                "Название: {name}\n"
+                "Описание: {description}\n"
+                "Жанр: {genre}\n"
+                "Год: {year}\n"
+                "Рейтинг: {rating}\n"
+                "Возрастной рейтинг: {age_rating}\n"
+                "Постер: {poster}\n"
         .format(
-            history_id=self.history_id,
-            user = self.user,
-            date=self.date.strftime(DATE_FORMAT),
-            movie_title = self.movie_title
+            date=self.date,
+            name = self.movie_title,
+            description = self.movie_description,
+            genre = self.movie_genre,
+            year = self.movie_year,
+            rating = self.movie_rating,
+            age_rating = self.movie_age_rating,
+            poster = self.movie_poster
         ))
 
 def create_models():
     db.create_tables(BaseModel.__subclasses__())
+
+# create_models()
+#
+# User.create(
+#             user_id=1916238619,
+#             username='ler4ikd',
+#             first_name='Valeri♡'
+#         )
+#
+# user_instance = User.get(User.user_id == 1916238619)
+#
+# MovieHistory.create(
+#     user = user_instance,
+#     movie_title = 'vovovo'
+# )

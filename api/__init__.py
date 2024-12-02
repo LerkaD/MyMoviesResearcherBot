@@ -1,6 +1,6 @@
 import  requests
 import json
-from typing import List, Dict
+from typing import List
 from config_data.config import API_BASE_URL,API_KEY
 
 

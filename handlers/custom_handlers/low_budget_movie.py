@@ -1,25 +1,10 @@
 from loader import bot
 from telebot.types import Message
-from states.states import BotStates
-from . import operations as oper
 import api
+from states.states import BotStates
+from .operations import parse_results, check_request_data
+from database.settings import add_movie_to_history
 
-def parse_results(req_data: dict):
-    movies_list = []
-    # movie_info = []
-    for movie in req_data['docs']:
-        movie_info = (
-            f"Название: {oper.check_description(movie, 'name')}\n"
-            f"Описание: {oper.check_description(movie, 'description')}\n"
-            f"Год: {oper.check_description(movie, 'year')}\n"
-            f"Рейтинг: {oper.check_description(movie, 'rating')}\n"
-            f"Возрастное ограничение: {oper.check_description(movie, 'ageRating')}\n"
-            f"Постер: {oper.check_description(movie, 'poster')}\n"
-            "-------------------------\n"
-        )
-        #print(movie_info)
-        movies_list.append(movie_info)
-    return movies_list
 
 @bot.message_handler(commands=['low_budget_movie'])
 def get_low_budget_movies(message: Message) -> None:
@@ -33,11 +18,13 @@ def get_low_budget_movies(message: Message) -> None:
         message.chat.id,
         'Введите жанр фильма для поиска.\n'
     )
-    bot.set_state(message.from_user.id, BotStates.low_budget_movie, message.chat.id)#смена состояния на movie_search state
+    bot.set_state(message.from_user.id, BotStates.low_budget_movie, message.chat.id)
 
 @bot.message_handler(state=BotStates.low_budget_movie)
 def low_budget_movies_search(message: Message) -> None:
+    print('into')
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data: #контекстный менеджер с данными о пользователе в чате
+        print(data)
         if 'movie_genre' not in data:
             data['movie_genre'] = message.text
             bot.send_message(
@@ -47,12 +34,13 @@ def low_budget_movies_search(message: Message) -> None:
         elif 'limit' not in data:
             data['limit'] = message.text
             if len(data) == 2:
-                print(data)
                 result = api.get_low_budget_movie(data)
-                movies_list = parse_results(result)
+                if result['total'] == 0:
+                    check_request_data(bot, message, data)
+                cur_user = message.from_user.id
+                movies_list, mov_his_list = parse_results(result)  # , mov_his_list
+                add_movie_to_history(mov_his_list, cur_user)
                 for movie in movies_list:
                     bot.send_message(message.chat.id, movie)
-                bot.set_state(message.from_user.id, BotStates.base,message.chat.id)  # смена состояния на movie_search state
-
-                  # смена состояния на movie_search state
-
+                data.clear()
+                bot.set_state(message.from_user.id, BotStates.base,message.chat.id)

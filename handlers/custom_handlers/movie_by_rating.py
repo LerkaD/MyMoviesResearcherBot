@@ -2,6 +2,8 @@ from loader import bot
 from telebot.types import Message
 from states.states import BotStates
 import api
+from .operations import parse_results, check_request_data
+from database.settings import add_movie_to_history
 
 @bot.message_handler(commands=['movie_by_rating'])
 def get_movie_by_rating(message: Message) -> None:
@@ -37,20 +39,13 @@ def search_movie_by_rating(message: Message) -> None:
         elif 'limit' not in data:
             data['limit'] = message.text
             if len(data) == 3:
-                print(data)
                 result = api.get_movie_by_rating(data)
-                movies_list = []
-                for movie in result['docs']:
-                    movie_info = (
-                        f"Название: {movie['name']}\n"
-                        f"Описание: {movie['description']}\n"
-                        f"Год: {movie['year']}\n"
-                        f"Рейтинг: {movie['rating']['kp']}\n"
-                        f"Возрастное ограничение: {movie['ageRating']}\n"
-                        f"Постер: {movie['poster']['url']}\n"
-                        "-------------------------\n"
-                    )
-                    movies_list.append(movie_info)
+                if result['total'] == 0:
+                    check_request_data(bot, message, data)
+                cur_user = message.from_user.id
+                movies_list, mov_his_list = parse_results(result)  # , mov_his_list
+                add_movie_to_history(mov_his_list, cur_user)
                 for movie in movies_list:
                     bot.send_message(message.chat.id, movie)
+                data.clear()
                 bot.set_state(message.from_user.id, BotStates.base,message.chat.id)  # смена состояния на movie_search state
