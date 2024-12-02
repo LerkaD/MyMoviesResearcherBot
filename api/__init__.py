@@ -29,21 +29,20 @@ def get_movie_by_rating(data: dict):
     return response.json()
 
 def get_low_budget_movie(data: dict):
-    print('get_low_budget_movie')
+   # print('get_low_budget_movie')
     endpoint = (f'v1.4/movie?limit={data["limit"]}'
                 f'&&notNullFields=fees.usa.value&budget.value=1-1000000000'
                 f'&genres.name={data["movie_genre"]}')
     response = api_request(endpoint)
-    print(response.json())
+    #print(response.json())
     return response.json()
 
 def get_high_budget_movie(data: dict):
-    print('get_low_budget_movie')
     endpoint = (f'v1.4/movie?limit={data["limit"]}'
                 f'&notNullFields=fees.usa.value&budget.value=200000000-1000000000'
                 f'&genres.name={data["movie_genre"]}')
     response = api_request(endpoint)
-    print(response.json())
+    #print(response.json())
     return response.json()
 
 # data = {

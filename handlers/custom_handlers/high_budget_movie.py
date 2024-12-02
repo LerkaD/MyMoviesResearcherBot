@@ -33,7 +33,7 @@ def high_budget_movies_search(message: Message) -> None:
         elif 'limit' not in data:
             data['limit'] = message.text
             if len(data) == 2:
-                result = api.get_high_budget_movie()
+                result = api.get_high_budget_movie(data)
                 if result['total'] == 0:
                     check_request_data(bot, message, data)
                 cur_user = message.from_user.id
