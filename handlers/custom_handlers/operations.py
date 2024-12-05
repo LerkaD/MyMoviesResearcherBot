@@ -79,9 +79,3 @@ def parse_results(req_data):
         movies_list.append(movie_info)
         movies_history_list.append(movie_history_info)
     return movies_list, movies_history_list
-
-def check_request_data(bot, message, data):
-    bot.send_message(message.chat.id, 'По вашему запросу фильма не найдено.\n')
-    data.clear()
-    bot.send_message(message.chat.id, 'Для продолжения работы выберите операцию.\n')
-    bot.set_state(message.from_user.id, BotStates.base, message.chat.id)
