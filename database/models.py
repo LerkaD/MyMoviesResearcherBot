@@ -9,7 +9,7 @@ from peewee import (
     SqliteDatabase, FloatField,
 )
 
-from config_data.config import DATE_FORMAT, DB_PATH
+from config_data import DATE_FORMAT, DB_PATH
 import datetime
 db = SqliteDatabase(DB_PATH)
 
@@ -74,3 +74,5 @@ def create_models():
 #     user = user_instance,
 #     movie_title = 'vovovo'
 # )
+
+

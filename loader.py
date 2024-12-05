@@ -1,5 +1,4 @@
 from telebot import TeleBot
-from config_data import config
+from config_data.configuration import BOT_TOKEN
 
-
-bot = TeleBot(token=config.BOT_TOKEN )#, parse_mode="MARKDOWN")
+bot = TeleBot(token=BOT_TOKEN )#, parse_mode="MARKDOWN")
