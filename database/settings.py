@@ -16,7 +16,7 @@ def add_movie_to_history(movies, cur_user):
 
 def get_history_by_date(date):
     # print('MovieHistory')
-    query = MovieHistory.select().where(MovieHistory.date == date).limit(3)
+    query = MovieHistory.select().where(MovieHistory.date == date).limit(5)
     mov_history = query.dicts().execute()
     # for mov in mov_history:
     #     print(mov)
