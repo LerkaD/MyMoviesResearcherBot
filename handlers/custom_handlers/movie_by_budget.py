@@ -3,7 +3,7 @@ from telebot.types import Message
 from api import get_low_budget_movie, get_high_budget_movie
 from states import BotStates
 from telebot import types
-from .operations import parse_results, check_request_data
+from .operations import parse_results
 from database import add_movie_to_history
 from keyboards import bud_keyboard
 

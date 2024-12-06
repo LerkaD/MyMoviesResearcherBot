@@ -2,7 +2,7 @@ from loader import bot
 from telebot.types import Message
 from states.states import BotStates
 from api import get_movie_by_rating
-from .operations import parse_results, check_request_data
+from .operations import parse_results
 from database.settings import add_movie_to_history
 
 @bot.message_handler(commands=['movie_by_rating'])

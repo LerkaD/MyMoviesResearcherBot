@@ -3,7 +3,7 @@ from loader import bot
 from telebot.types import Message
 from states.states import BotStates
 import api
-from .operations import parse_results,check_request_data
+from .operations import parse_results
 from database.settings import add_movie_to_history
 #from pagination.pagination import show_buttons, first_button
 

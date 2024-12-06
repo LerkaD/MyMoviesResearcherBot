@@ -15,8 +15,8 @@ def add_movie_to_history(movies, cur_user):
         new_movie.save()
 
 def get_history_by_date(date):
-    print(MovieHistory)
-    query = MovieHistory.select().where(MovieHistory.date == date).limit(5)
+    # print('MovieHistory')
+    query = MovieHistory.select().where(MovieHistory.date == date).limit(3)
     mov_history = query.dicts().execute()
     # for mov in mov_history:
     #     print(mov)
@@ -24,6 +24,7 @@ def get_history_by_date(date):
     return mov_history
 
 def show_history_movie(movie):
+    print('show_history_movie')
     return ("Дата запроса: {date}\n"
             "Название: {name}\n"
             "Описание: {description}\n"
