@@ -53,29 +53,16 @@ def get_genres(movie):
     else:
         return 'Нет описания'
 
-def parse_results(req_data):
-    movies_list = []
-    movies_history_list= []
+def add_movie_to_history(req_data, cur_user):
     for movie in req_data['docs']:
-        name = get_movie_name(movie)
-        description = get_description(movie)
-        year = get_year(movie)
-        rating = get_rating(movie)
-        age_rating = get_description(movie)
-        poster = get_poster(movie)
-        genre = get_genres(movie)
-        movie_info = (
-            f"Название: {name}\n"
-            f"Описание: {description}\n"
-            f"Жанр: {genre}\n"
-            f"Год: {year}\n"
-            f"Рейтинг: {rating}\n"
-            f"Возрастной рейтинг: {age_rating}\n"
-            f"Постер: {poster}\n"
-            # "-------------------------\n"
+        new_movie = MovieHistory(
+            user=cur_user,
+            movie_title=get_movie_name(movie),
+            movie_description=get_description(movie),
+            movie_rating=get_rating(movie),
+            movie_year=get_year(movie),
+            movie_genre=get_genres(movie),
+            movie_age_rating=get_description(movie),
+            movie_poster=get_poster(movie)
         )
-        movie_history_info = [name, description, year, rating, age_rating, poster, genre]
-        print(type(movie_info), movie_info)
-        movies_list.append(movie_info)
-        movies_history_list.append(movie_history_info)
-    return movies_list, movies_history_list
+        new_movie.save()
