@@ -2,7 +2,7 @@ from .models import MovieHistory
 
 def get_history_by_date(date):
     # print('MovieHistory')
-    query = MovieHistory.select().where(MovieHistory.date == date)
+    query = MovieHistory.select().where(MovieHistory.date == date)#.limit(10)
     mov_history = query.dicts().execute()
     # for mov in mov_history:
     #     print(mov)

@@ -5,7 +5,6 @@ from loader import bot
 from database import get_history_by_date
 from states import BotStates
 
-
 def show_first_pag_page(chat_id, date, limit):
     result = get_history_by_date(date)
     history = result[-(limit):][::-1]
@@ -17,16 +16,26 @@ def show_first_pag_page(chat_id, date, limit):
                                                     str(len(history)) + ' '+
                                                     str(date) + ' ' +
                                                     str(limit))
-    close_button = InlineKeyboardButton(text=f'Закончить просмотр', callback_data=f'close')
+    close_button = InlineKeyboardButton(text=f'Закончить просмотр', callback_data = 'close')
 
-    buttons.add(curr_page_b, next_page_b)
+    if limit == 1:
+        buttons.add(curr_page_b)
+    else:
+        buttons.add(curr_page_b, next_page_b)
+
     buttons.add(close_button)
-
     bot.send_message(chat_id,show_history_movie(history[0]), reply_markup = buttons)
+
+@bot.callback_query_handler(func=lambda call: call.data == 'close')
+def close_button(call):
+    print(close_button)
+    bot.send_message(call.message.chat.id, 'Просмотр окончен. Введите следующую операцию')
+    bot.set_state(call.message.message_id , BotStates.base, call.message.chat.id)
 
 @bot.callback_query_handler(func=lambda call: len(call.data.split(' ')) == 4)
 def show_other_pages(call):
-    # print(call.data)
+    print(show_other_pages)
+    print(call.data.split(' '))
     call_text = call.data.split(' ')
 
     curr_page = int(call_text[0])
@@ -45,7 +54,7 @@ def show_other_pages(call):
     next_page_b = InlineKeyboardButton(text=f'->>', callback_data = str(curr_page + 1) + ' ' +
                                                     str(len(history)) + ' ' + str(date) + ' ' + str(limit))
 
-    close_button = InlineKeyboardButton(text=f'Закончить просмотр', callback_data=f'close')
+    close_button = InlineKeyboardButton(text= 'Закончить просмотр', callback_data = 'close')
 
     if curr_page == 0:
         buttons.add(curr_page_b, next_page_b)
@@ -59,6 +68,3 @@ def show_other_pages(call):
                           reply_markup=buttons, chat_id=call.message.chat.id,
                           message_id=call.message.message_id)
 
-@bot.callback_query_handler(func=lambda call: call == 'close')
-def close_button(call):
-    bot.set_state(call.message.message_id , BotStates.base, call.message.chat.id)

@@ -62,7 +62,7 @@ def add_movie_to_history(req_data, cur_user):
             movie_rating=get_rating(movie),
             movie_year=get_year(movie),
             movie_genre=get_genres(movie),
-            movie_age_rating=get_description(movie),
+            movie_age_rating=get_age_rating(movie),
             movie_poster=get_poster(movie)
         )
         new_movie.save()

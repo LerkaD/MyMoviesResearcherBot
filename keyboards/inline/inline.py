@@ -1,7 +1,5 @@
 from telebot import types
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-from telebot import TeleBot
-import json
+from telebot.types import InlineKeyboardButton
 from database import show_history_movie
 from loader import bot
 from database import get_history_by_date
@@ -16,11 +14,12 @@ def show_first_history_page(chat_id, history, date):
 
     buttons.add(curr_page_b, next_page_b)
     buttons.add(close_button)
-
     bot.send_message(chat_id,show_history_movie(history[0]), reply_markup = buttons)
 
-@bot.callback_query_handler(func=lambda call: call.data.split(' ') == 3)
-def first_button(call):
+@bot.callback_query_handler(func=lambda call: len(call.data.split(' ')) == 3)
+def show_other_history(call):
+    print('first_button')
+    print(call.data.split(' '))
     call_text = call.data.split(' ')
 
     curr_page = int(call_text[0])

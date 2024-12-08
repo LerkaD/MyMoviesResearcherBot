@@ -32,4 +32,5 @@ def get_history_process(message):
         show_first_history_page(message.chat.id, history, date)
     else:
         bot.send_message(message.chat.id, 'В день: {date} история пуста.'.format(date = message.text)) #reply_markup = show_pagination_buttons())
-    bot.set_state(message.from_user.id, BotStates.base, message.chat.id)
+        bot.set_state(message.from_user.id, BotStates.base, message.chat.id)
+

@@ -59,7 +59,7 @@ def researching_movie(message,data_from_user):
         if result:
             add_movie_to_history(result, message.from_user.id)
             show_first_pag_page(message.chat.id, datetime.now().strftime(DATE_FORMAT), int(data_from_user['limit']))
-            bot.set_state(message.from_user.id, BotStates.base,message.chat.id)
+            # bot.set_state(message.from_user.id, BotStates.base,message.chat.id)
         else:
             raise bot.send_message(message.chat.id, 'По вашему запросу ничего не найдено')  #
     except Exception as e:
